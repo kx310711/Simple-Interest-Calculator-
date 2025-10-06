@@ -1,19 +1,62 @@
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --background-color: #f4f4f4;
+    --card-color: #ffffff;
+    --text-color: #333333;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    background-color: black;
-    font-family: Arial, Helvetica, sans-serif;
-    color: white;
+    font-family: 'Arial', sans-serif;
+    background-color: var(--background-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    line-height: 1.6;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+}
+
+.calculator-card {
+    background-color: var(--card-color);
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    padding: 30px;
+    text-align: center;
 }
 
 h1 {
-    color: grey;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: var(--primary-color);
+    margin-bottom: 25px;
+    font-size: 2rem;
 }
 
-.maindiv {
-    background-color: white;
-    color: black;
-    width: 60%;
-    padding: 12rem;
-    border-radius: 25rem;
-    text-align: center;
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-color);
+}
+
+input[type="number"],
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid ;
 }
