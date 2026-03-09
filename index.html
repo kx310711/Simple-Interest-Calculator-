@@ -1,58 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Interest Calculator</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interest Calculator</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="container">
-        <div class="calculator-card">
-            <h1>Simple Interest Calculator</h1>
-            
-            <div class="input-group">
-                <label for="principal">Principal Amount</label>
-                <input type="number" id="principal" placeholder="Enter principal amount">
-            </div>
+  <main class="container">
+    <section class="calculator-card" aria-labelledby="calculator-title">
+      <div class="top-bar">
+        <h1 id="calculator-title">Interest Calculator</h1>
+        <button id="theme_btn" class="theme-btn" type="button">Theme: Auto</button>
+      </div>
 
-            <div class="input-group">
-                <label for="rate">Interest Rate</label>
-                <div class="range-container">
-                    <input type="range" id="rate" min="1" max="20" value="10.25" step="0.25" onchange="updateRate()">
-                    <span id="rate_val" class="rate-display">10.25%</span>
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label for="years">Number of Years</label>
-                <select id="years">
-                    <option value="1">1 Year</option>
-                    <option value="2">2 Years</option>
-                    <option value="3">3 Years</option>
-                    <option value="4">4 Years</option>
-                    <option value="5">5 Years</option>
-                    <option value="6">6 Years</option>
-                    <option value="7">7 Years</option>
-                    <option value="8">8 Years</option>
-                    <option value="9">9 Years</option>
-                    <option value="10">10 Years</option>
-                </select>
-            </div>
-
-            <div class="result-group">
-                <label>Calculated Interest:</label>
-                <span id="result" class="result-display">-</span>
-            </div>
-
-            <button onclick="compute()" class="compute-btn">Calculate Interest</button>
+      <div class="grid two-col">
+        <div class="input-group">
+          <label for="mode">Calculation Mode</label>
+          <select id="mode">
+            <option value="simple">Simple Interest</option>
+            <option value="compound">Compound Interest</option>
+          </select>
         </div>
-    </div>
 
-    <footer>
-        © 2025 This Calculator belongs to Illinois Familia
-    </footer>
+        <div class="input-group">
+          <label for="currency">Currency</label>
+          <select id="currency">
+            <option value="USD">USD ($)</option>
+            <option value="DOP">DOP (RD$)</option>
+            <option value="EUR">EUR (€)</option>
+          </select>
+        </div>
+      </div>
 
-    <script src="script.js"></script>
+      <div class="input-group">
+        <label for="principal">Principal Amount</label>
+        <input type="number" id="principal" min="1" step="0.01" placeholder="Enter principal amount" />
+      </div>
+
+      <div class="input-group">
+        <label for="rate">Interest Rate (%) <span class="hint">up to 300%</span></label>
+        <div class="range-container">
+          <input type="range" id="rate" min="0.25" max="300" value="10.25" step="0.25" />
+          <input type="number" id="rate_number" min="0.25" max="300" value="10.25" step="0.25" />
+          <span id="rate_val" class="rate-display">10.25%</span>
+        </div>
+      </div>
+
+      <div class="grid two-col">
+        <div class="input-group">
+          <label for="rate_type">Rate Type</label>
+          <select id="rate_type">
+            <option value="fixed">Fixed Rate</option>
+            <option value="variable">Variable Rate</option>
+          </select>
+        </div>
+
+        <div class="input-group" id="rate_end_group" hidden>
+          <label for="rate_end">Ending Rate (%)</label>
+          <input type="number" id="rate_end" min="0.25" max="300" value="14" step="0.25" />
+        </div>
+      </div>
+
+      <div class="grid two-col">
+        <div class="input-group">
+          <label for="years">Number of Years</label>
+          <select id="years">
+            <option value="1">1 Year</option>
+            <option value="2">2 Years</option>
+            <option value="3">3 Years</option>
+            <option value="4">4 Years</option>
+            <option value="5">5 Years</option>
+            <option value="6">6 Years</option>
+            <option value="7">7 Years</option>
+            <option value="8">8 Years</option>
+            <option value="9">9 Years</option>
+            <option value="10">10 Years</option>
+            <option value="15">15 Years</option>
+            <option value="20">20 Years</option>
+          </select>
+        </div>
+
+        <div class="input-group" id="compound_group">
+          <label for="compound_frequency">Compounding Frequency</label>
+          <select id="compound_frequency">
+            <option value="1">Yearly</option>
+            <option value="4">Quarterly</option>
+            <option value="12" selected>Monthly</option>
+            <option value="52">Weekly</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid two-col">
+        <div class="input-group">
+          <label for="monthly">Monthly Contribution <span class="hint">optional</span></label>
+          <input type="number" id="monthly" min="0" step="0.01" value="0" />
+        </div>
+
+        <div class="input-group">
+          <label for="breakdown_mode">Breakdown Mode</label>
+          <select id="breakdown_mode">
+            <option value="yearly" selected>Yearly</option>
+            <option value="monthly">Monthly</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-group compare-toggle">
+        <label>
+          <input type="checkbox" id="compare_mode" /> Compare Simple vs Compound
+        </label>
+      </div>
+
+      <p id="error" class="error" aria-live="polite"></p>
+
+      <div class="actions">
+        <button id="compute_btn" class="compute-btn" type="button">Calculate</button>
+        <button id="reset_btn" class="reset-btn" type="button">Reset</button>
+        <button id="copy_btn" class="neutral-btn" type="button">Copy Result</button>
+        <button id="share_btn" class="neutral-btn" type="button">Copy Share Link</button>
+        <button id="csv_btn" class="neutral-btn" type="button">Export CSV</button>
+        <button id="pdf_btn" class="neutral-btn" type="button">Export PDF</button>
+      </div>
+
+      <p id="share_status" class="status" aria-live="polite"></p>
+
+      <div class="metrics" id="metrics">
+        <article>
+          <h2>Interest</h2>
+          <p id="interest_metric">$0.00</p>
+        </article>
+        <article>
+          <h2>Total Amount</h2>
+          <p id="amount_metric">$0.00</p>
+        </article>
+        <article>
+          <h2>Maturity Year</h2>
+          <p id="year_metric">-</p>
+        </article>
+      </div>
+
+      <div class="compare-panel" id="compare_panel" hidden>
+        <article>
+          <h2>Simple</h2>
+          <p id="compare_simple">-</p>
+        </article>
+        <article>
+          <h2>Compound</h2>
+          <p id="compare_compound">-</p>
+        </article>
+      </div>
+
+      <p id="difference_badge" class="difference-badge" hidden></p>
+
+      <div class="result-group">
+        <label>Calculation Summary:</label>
+        <p id="result" class="result-display">Enter values to calculate your result.</p>
+      </div>
+
+      <section class="chart-group" aria-labelledby="chart-title">
+        <h2 id="chart-title">Growth Chart</h2>
+        <canvas id="growth_chart" width="560" height="260"></canvas>
+      </section>
+
+      <section class="table-group" aria-labelledby="table-title">
+        <h2 id="table-title">Breakdown</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th id="period_label">Year</th>
+                <th>Start</th>
+                <th>Contributions</th>
+                <th>Interest</th>
+                <th>End</th>
+              </tr>
+            </thead>
+            <tbody id="breakdown_body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="history" aria-labelledby="history-title">
+        <h2 id="history-title">Recent Calculations</h2>
+        <ul id="history_list"></ul>
+      </section>
+    </section>
+  </main>
+
+  <footer>© 2026 Illinois Familia</footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
